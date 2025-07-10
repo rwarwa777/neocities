@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang=”en”>
+<head>
+  <meta charset=”UTF-8”>
+  <title>ILY KakCi</title>
+  <style>
+    Body {
+      Margin: 0;
+      Background: black;
+      Overflow: hidden;
+      Font-family: ‘Arial’, sans-serif;
+    }
+
+    H1 {
+      Position: absolute;
+      Top: 20px;
+      Width: 100%;
+      Text-align: center;
+      Font-size: 3em;
+      Color: #00f0ff;
+      Text-shadow: 0 0 15px #00f0ff;
+      z-index: 10;
+    }
+
+    Canvas {
+      Display: block;
+      Position: absolute;
+      Top: 0;
+      Left: 0;
+    }
+
+    .flower {
+      Position: absolute;
+      Top: -50px;
+      Width: 30px;
+      Height: 30px;
+      Background-image: url(‘https://i.ibb.co/N1ZLrtq/flower-pink.png’);
+      Background-size: cover;
+      Animation: fall linear infinite;
+      z-index: 5;
+    }
+
+    @keyframes fall {
+      To {
+        Transform: translateY(110vh) rotate(360deg);
+        Opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>ILY KakCi</h1>
+  <canvas id=”heartCanvas”></canvas>
+
+  <script>
+    // Particle Heart
+    Const canvas = document.getElementById(“heartCanvas”);
+    Const ctx = canvas.getContext(“2d”);
+
+    Canvas.width = window.innerWidth;
+    Canvas.height = window.innerHeight;
+
+    Const particles = [];
+    Const particleCount = 800;
+
+    Function heartFunction(t) {
+      Let x = 16 * Math.pow(Math.sin(t), 3);
+      Let y = 13 * Math.cos(t) – 5 * Math.cos(2*t) – 2 * Math.cos(3*t) – Math.cos(4*t);
+      Return {x, y};
+    }
+
+    For (let I = 0; I < particleCount; i++) {
+      Let t = Math.random() * Math.PI * 2;
+      Let pos = heartFunction(t);
+      Particles.push({
+        X: canvas.width / 2 + pos.x * 15,
+        Y: canvas.height / 2 – pos.y * 15,
+        Vx: (Math.random() – 0.5) * 1.5,
+        Vy: (Math.random() – 0.5) * 1.5,
+        Alpha: Math.random() * 0.8 + 0.2
+      });
+    }
+
+    Function animate() {
+      Ctx.fillStyle = “rgba(0, 0, 0, 0.2)”;
+      Ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      For (let p of particles) {
+        Ctx.beginPath();
+        Ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        Ctx.fillStyle = `rgba(0, 255, 255, ${p.alpha})`;
+        Ctx.fill();
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    Animate();
+
+    // Falling Flowers
+    Function createFlower() {
+      Const flower = document.createElement(“div”);
+      Flower.classList.add(“flower”);
+      Flower.style.left = Math.random() * window.innerWidth + “px”;
+      Flower.style.animationDuration = (Math.random() * 3 + 3) + “s”;
+      Flower.style.opacity = Math.random();
+
+      Document.body.appendChild(flower);
+
+      setTimeout(() => flower.remove(), 7000);
+    }
+
+    setInterval(createFlower, 300);
+  </script>
+</body>
+</html>
+
